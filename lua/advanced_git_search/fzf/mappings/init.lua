@@ -6,7 +6,7 @@ local file_utils = require("advanced_git_search.utils.file")
 local git_utils = require("advanced_git_search.utils.git")
 local config = require("advanced_git_search.utils.config")
 
----FZF: <C-w> Toggle date or author in picker entry
+---FZF: <C-w> Cycle author/date/both in picker entry
 ---@return table
 M.toggle_entry_value = function()
     return {
