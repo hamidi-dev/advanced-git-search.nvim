@@ -4,12 +4,24 @@ local config = require("advanced_git_search.utils.config")
 
 local M = {}
 
-local show_date_instead_of_author = (
-    config.entry_default_author_or_date() == "date"
-)
+local display_mode
+
+local function get_display_mode()
+    if not display_mode then
+        display_mode = config.entry_default_author_or_date()
+    end
+    return display_mode
+end
 
 M.toggle_show_date_instead_of_author = function()
-    show_date_instead_of_author = not show_date_instead_of_author
+    local mode = get_display_mode()
+    if mode == "author" then
+        display_mode = "date"
+    elseif mode == "date" then
+        display_mode = "both"
+    else
+        display_mode = "author"
+    end
 end
 
 M.make_entry = function(entry)
@@ -36,10 +48,15 @@ M.make_entry = function(entry)
     end
 
     -- NOTE: make sure the first value is the commit hash
+    local mode = get_display_mode()
     local final_entry
-    if show_date_instead_of_author then
+    if mode == "date" then
         final_entry = color.magenta(hash)
             .. color.cyan(" " .. date)
+            .. color.yellow(message)
+    elseif mode == "both" then
+        final_entry = color.magenta(hash)
+            .. color.cyan(" " .. date .. " @" .. author)
             .. color.yellow(message)
     else
         final_entry = color.magenta(hash)

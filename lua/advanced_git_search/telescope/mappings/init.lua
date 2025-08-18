@@ -19,13 +19,14 @@ M.omnimap = omnimap
 
 -- create a local function and assign it to a map to get which_key description
 -------------------------------------------------------------------------------
-local toggle_date_author = function(prompt_bufnr)
+-- Telescope: <C-w> Cycle author/date/both in picker entry
+local cycle_date_author = function(prompt_bufnr)
     require("advanced_git_search.telescope.finders.utils").toggle_show_date_instead_of_author()
     action_state.get_current_picker(prompt_bufnr):refresh()
 end
 
 M.toggle_entry_value = function(map)
-    omnimap(map, config.get_keymap("toggle_date_author"), toggle_date_author)
+    omnimap(map, config.get_keymap("toggle_date_author"), cycle_date_author)
 end
 
 -------------------------------------------------------------------------------
