@@ -24,6 +24,7 @@ M.search_log_content = function()
             fzf_mappings.open_diff_buffer_with_selected_commit(bufnr),
             fzf_mappings.show_entire_commit(),
             fzf_mappings.copy_commit_hash(),
+            fzf_mappings.copy_commit_patch(),
             fzf_mappings.toggle_entry_value()
         ),
     }
@@ -55,6 +56,7 @@ M.search_log_content_file = function()
             fzf_mappings.open_diff_buffer_with_selected_commit(bufnr),
             fzf_mappings.show_entire_commit(),
             fzf_mappings.copy_commit_hash(),
+            fzf_mappings.copy_commit_patch(bufnr),
             fzf_mappings.toggle_entry_value()
         ),
     }
@@ -94,6 +96,7 @@ M.diff_commit_line = function()
             fzf_mappings.open_diff_buffer_with_selected_commit(bufnr),
             fzf_mappings.show_entire_commit(),
             fzf_mappings.copy_commit_hash(),
+            fzf_mappings.copy_commit_patch(bufnr),
             fzf_mappings.toggle_entry_value()
         ),
     }
@@ -122,6 +125,7 @@ M.diff_commit_file = function()
             fzf_mappings.open_diff_buffer_with_selected_commit(bufnr),
             fzf_mappings.show_entire_commit(),
             fzf_mappings.copy_commit_hash(),
+            fzf_mappings.copy_commit_patch(bufnr),
             fzf_mappings.toggle_entry_value()
         ),
     }

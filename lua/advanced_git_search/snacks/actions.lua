@@ -65,4 +65,15 @@ M.copy_commit_hash = {
     end,
 }
 
+---@param bufnr? number
+---@return AdvancedGitSearch.Snacks.Mapping
+M.copy_commit_patch = function(bufnr)
+    return {
+        key = config.get_keymap("copy_commit_patch") or "<C-p>",
+        action = function(_, item)
+            global_actions.copy_patch_to_clipboard(item.commit, bufnr)
+        end,
+    }
+end
+
 return M

@@ -1,4 +1,8 @@
 local config = require("advanced_git_search.utils.config")
+local command_utils = require("advanced_git_search.commands.utils")
+local command_util = require("advanced_git_search.utils.command")
+local file_utils = require("advanced_git_search.utils.file")
+local git_utils = require("advanced_git_search.utils.git")
 
 local M = {}
 
@@ -50,6 +54,33 @@ M.copy_to_clipboard = function(commit_hash)
 
     vim.fn.setreg("+", commit_hash)
     vim.fn.setreg("*", commit_hash)
+end
+
+---General action: Copy commit patch to system clipboard
+---@param commit_hash string
+---@param bufnr? number
+M.copy_patch_to_clipboard = function(commit_hash, bufnr)
+    local command = { "git", "show" }
+    command = command_utils.format_git_diff_command(command)
+    table.insert(command, commit_hash)
+
+    if bufnr ~= nil then
+        local filename = file_utils.git_relative_path(bufnr)
+        local commit_file = git_utils.file_name_on_commit(commit_hash, filename)
+        table.insert(command, "--")
+        table.insert(command, commit_file or filename)
+    end
+
+    local patch = command_util.execute(table.concat(command, " "))
+
+    vim.notify(
+        "Copied commit patch " .. commit_hash .. " to clipboard",
+        vim.log.levels.INFO,
+        { title = "Advanced Git Search" }
+    )
+
+    vim.fn.setreg("+", patch)
+    vim.fn.setreg("*", patch)
 end
 
 ---General action: Open commit in browser

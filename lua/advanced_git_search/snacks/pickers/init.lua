@@ -8,7 +8,9 @@ local snacks_actions = require("advanced_git_search.snacks.actions")
 local M = {}
 
 ---@return table
-local commit_actions = function()
+local commit_actions = function(bufnr)
+    bufnr = bufnr or vim.fn.bufnr()
+    local copy_patch = snacks_actions.copy_commit_patch(bufnr)
     return {
         win = {
             input = {
@@ -21,6 +23,10 @@ local commit_actions = function()
                         "copy_commit_hash",
                         mode = { "n", "i" },
                     },
+                    [copy_patch.key] = {
+                        "copy_commit_patch",
+                        mode = { "n", "i" },
+                    },
                     [snacks_actions.show_entire_commit.key] = {
                         "show_entire_commit",
                         mode = { "n", "i" },
@@ -31,10 +37,9 @@ local commit_actions = function()
         actions = {
             open_commit_in_browser = snacks_actions.open_commit_in_browser.action,
             copy_commit_hash = snacks_actions.copy_commit_hash.action,
+            copy_commit_patch = copy_patch.action,
             show_entire_commit = snacks_actions.show_entire_commit.action,
-            confirm = snacks_actions.open_diff_buffer_with_selected_commit(
-                vim.fn.bufnr()
-            ).action,
+            confirm = snacks_actions.open_diff_buffer_with_selected_commit(bufnr).action,
         },
     }
 end
@@ -57,8 +62,8 @@ M.search_log_content_file = function()
         finder = snack_finders.git_log_content({ bufnr = bufnr }),
         format = snack_formatters.git_log(),
         preview = snack_previewers.git_diff_content({ bufnr = bufnr }),
-        actions = commit_actions().actions,
-        win = commit_actions().win,
+        actions = commit_actions(bufnr).actions,
+        win = commit_actions(bufnr).win,
         live = true,
     })
 end
@@ -81,8 +86,8 @@ M.diff_commit_line = function()
         finder = snack_finders.git_log_location(bufnr, s_start, s_end),
         format = snack_formatters.git_log(),
         preview = snack_previewers.git_diff_file({ bufnr = bufnr }),
-        actions = commit_actions().actions,
-        win = commit_actions().win,
+        actions = commit_actions(bufnr).actions,
+        win = commit_actions(bufnr).win,
         live = true,
     })
 end
@@ -94,8 +99,8 @@ M.diff_commit_file = function()
         finder = snack_finders.git_log_file(bufnr),
         format = snack_formatters.git_log(),
         preview = snack_previewers.git_diff_file({ bufnr = bufnr }),
-        actions = commit_actions().actions,
-        win = commit_actions().win,
+        actions = commit_actions(bufnr).actions,
+        win = commit_actions(bufnr).win,
         live = true,
     })
 end

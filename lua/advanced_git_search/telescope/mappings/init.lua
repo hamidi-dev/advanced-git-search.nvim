@@ -107,6 +107,21 @@ M.copy_commit_hash_to_clipboard = function(map)
 end
 
 -------------------------------------------------------------------------------
+local copy_commit_patch = function(opts)
+    return function(_)
+        local selection = action_state.get_selected_entry()
+        local commit_hash = selection.opts.commit_hash
+
+        global_actions.copy_patch_to_clipboard(commit_hash, opts and opts.bufnr)
+    end
+end
+
+--- copy commit patch to clipboard with <C-p>
+M.copy_commit_patch_to_clipboard = function(map, opts)
+    omnimap(map, config.get_keymap("copy_commit_patch"), copy_commit_patch(opts))
+end
+
+-------------------------------------------------------------------------------
 local checkout = function(prompt_bufnr)
     actions.close(prompt_bufnr)
     local selection = action_state.get_selected_entry()

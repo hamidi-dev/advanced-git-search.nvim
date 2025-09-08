@@ -103,4 +103,21 @@ M.copy_commit_hash = function()
     }
 end
 
+---FZF: <C-p> Copy the selected commit patch to clipboard
+---@param bufnr? number
+---@return table
+M.copy_commit_patch = function(bufnr)
+    return {
+        [config.get_keymap("copy_commit_patch", "ctrl") or "ctrl-p"] = function(
+            selected,
+            _
+        )
+            local selection = selected[1]
+            local commit_hash = utils.split_string(selection, " ")[1]
+
+            global_actions.copy_patch_to_clipboard(commit_hash, bufnr)
+        end,
+    }
+end
+
 return M
